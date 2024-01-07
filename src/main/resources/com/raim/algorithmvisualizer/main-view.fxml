@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
+<?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -13,7 +14,7 @@
                <HBox.margin>
                   <Insets left="80.0" top="20.0" />
                </HBox.margin></Label>
-            <TextField fx:id="arrayTextField" onInputMethodTextChanged="#textChangedArrayTextField" promptText="Enter comma separated integers" text="[3,5,2,6,1,7]">
+            <TextField fx:id="arrayTextField" onInputMethodTextChanged="#textChangedArrayTextField" prefHeight="18.0" prefWidth="246.0" promptText="Enter comma separated integers" text="3,5,2,6,1,7,23,34,12,0,8,3,6,2">
                <HBox.margin>
                   <Insets top="19.0" />
                </HBox.margin>
@@ -58,14 +59,15 @@
    <center>
       <Pane prefHeight="483.0" prefWidth="549.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="nextStepButton" layoutX="351.0" layoutY="364.0" mnemonicParsing="false" onAction="#onNextStepButtonPressed" text="Next Step" />
-            <Button fx:id="previousStepButton" layoutX="77.0" layoutY="364.0" mnemonicParsing="false" onAction="#onPreviousStepButtonPressed" text="Previous Step" />
-            <Button fx:id="play_pauseButton" layoutX="204.0" layoutY="357.0" mnemonicParsing="false" onAction="#onPlay_pauseButtonPressed" prefHeight="40.0" prefWidth="88.0" text="Play" />
+            <Button fx:id="nextStepButton" layoutX="310.0" layoutY="438.0" mnemonicParsing="false" onAction="#onNextStepButtonPressed" prefHeight="30.0" prefWidth="78.0" text="Next Step" />
+            <Button fx:id="previousStepButton" layoutX="14.0" layoutY="438.0" mnemonicParsing="false" onAction="#onPreviousStepButtonPressed" text="Previous Step" />
+            <Button fx:id="play_pauseButton" layoutX="169.0" layoutY="433.0" mnemonicParsing="false" onAction="#onPlay_pauseButtonPressed" prefHeight="40.0" prefWidth="88.0" text="Start" />
+            <Canvas fx:id="canvas" height="428.0" width="513.0" />
          </children>
       </Pane>
    </center>
    <right>
-      <Pane prefHeight="302.0" prefWidth="238.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="483.0" prefWidth="220.0" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="86.0" layoutY="89.0" text="Label" />
             <Button fx:id="backButton" layoutX="88.0" layoutY="251.0" mnemonicParsing="false" onAction="#onBackButtonPressed" text="Back" />
