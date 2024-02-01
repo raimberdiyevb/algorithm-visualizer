@@ -21,18 +21,19 @@
                <padding>
                   <Insets top="-1.0" />
                </padding></TextField>
-            <RadioButton mnemonicParsing="false" selected="true" text="Ascending Order">
+            <RadioButton mnemonicParsing="false" selected="true" text="Ascending Order" fx:id="isAscRadioButton">
                <HBox.margin>
                   <Insets top="20.0" />
                </HBox.margin>
                <toggleGroup>
                   <ToggleGroup fx:id="radioToggleGroup" />
                </toggleGroup>
-               </RadioButton>
+            </RadioButton>
             <RadioButton mnemonicParsing="false" text="Descending Order" toggleGroup="$radioToggleGroup">
                <HBox.margin>
                   <Insets top="20.0" />
-               </HBox.margin></RadioButton>
+               </HBox.margin>
+            </RadioButton>
          </children>
          <BorderPane.margin>
             <Insets />
