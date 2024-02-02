@@ -33,8 +33,17 @@ public class MainController {
     public Canvas canvas;
     public ToggleGroup radioToggleGroup;
     public RadioButton isAscRadioButton;
+    public Button start_resetButton;
+    public RadioButton isDescRadioButton;
     private int[] array;
+    private int[] fArray;
     private boolean isAsc;
+    private int currentStep = 0;
+    List<int[]> states = new ArrayList<>();
+    boolean isValid = true;
+    HashMap<Double, Integer> stepDurationMap = new HashMap<>();
+    Timeline timeline = new Timeline();
+    //private boolean isSortingAnimationRunning = false;
 
     @FXML
     private void initialize() {
@@ -42,8 +51,10 @@ public class MainController {
         setArray(arrayTextField.getText().trim());
         textChangedArrayTextField();
         drawArray();
+        play_pauseButton.setDisable(true);
+        previousStepButton.setDisable(true);
+        nextStepButton.setDisable(true);
     }
-    boolean isValid = true;
     @FXML
     private void validateArrayInput() {
         System.out.println("VALIDATE METHOD!");
@@ -57,16 +68,14 @@ public class MainController {
             arrayTextField.setStyle("-fx-control-inner-background: #FFB6C1;"); // Light pink color
         }
     }
-
     private void setArray(String input) {
         array = Arrays.stream(input.split("\\s*,\\s*"))
                 .map(String::trim)  // Trim each element to remove leading/trailing whitespaces
                 .mapToInt(Integer::parseInt)
                 .toArray();
+        fArray = getState(array);
         System.out.println(Arrays.toString(array));
     }
-
-
     @FXML
     private boolean isValidArray(String input) {
         try {
@@ -89,117 +98,98 @@ public class MainController {
         stage.setResizable(false);
         stage.show();
     }
-
-    HashMap<Duration, Integer> stepDurationMap = new HashMap<>();
     public void onPlay_pauseButtonPressed(ActionEvent event1) {
-        if (isValid) {
-            System.out.println("VALID ARRAY!");
-            System.out.println(Arrays.toString(array));
-
-
-            int delay = 500; // milliseconds
-            int totalSteps = states.size();
-
-            KeyFrame[] keyFrames = new KeyFrame[totalSteps];
-            for (int i = 0; i < totalSteps; i++) {
-                int currentStep = i;
-                Duration duration = Duration.millis(i * delay);
-                KeyFrame keyFrame = new KeyFrame(duration, event -> {
-                    drawArray(currentStep);
-                });
-                stepDurationMap.put(duration, currentStep);
-                keyFrames[i] = keyFrame;
-            }
-
-            timeline.getKeyFrames().addAll(keyFrames);
-            timeline.setCycleCount(1);
-            timeline.setOnFinished(event -> {
-                isSortingAnimationRunning = false;
-                play_pauseButton.setText("Play");
-            });
-            isSortingAnimationRunning = true;
-
-
-
-
-            if( play_pauseButton.getText().equals("Start")){
-                arrayTextField.setEditable(false);
-                isAsc = isAscRadioButton.isSelected();
-                System.out.println("isASC ? " + isAsc);
-                bubbleSort(array);
-                timeline.play();
-            }
-            else if (play_pauseButton.getText().equals("Play")) {
-                //choose the algorithm by which I will get the states
-                // for not it is just bubble sort
-
-                timeline.play();
-                play_pauseButton.setText("Pause");
-            } else {
-                timeline.pause();
-                play_pauseButton.setText("Play");
-                isSortingAnimationRunning = false; // Reset the flag
-                this.currentStep = stepDurationMap.get(timeline.getCurrentTime());
-            }
-        } else {
-            System.out.println("INVALID ARRAY!");
+        if(play_pauseButton.getText().equals("Play")){
+            timeline.play();
+            play_pauseButton.setText("Pause");
+            previousStepButton.setDisable(true);
+            nextStepButton.setDisable(true);
+        }else{
+            timeline.pause();
+            previousStepButton.setDisable(false);
+            nextStepButton.setDisable(false);
+            System.out.println("Current Duration : " + timeline.getCurrentTime());
+            double currentMillis = Math.round(timeline.getCurrentTime().toMillis() / 100.0) * 100.0;
+            currentStep = stepDurationMap.get(currentMillis);
+            play_pauseButton.setText("Play");
         }
     }
 
+    public void onStartResetButtonClicked(ActionEvent event1) {
+        if(!isValid){
+            System.out.println("ERROR");
+        }else {
+            System.out.print("VALID ARRAY : ");
+            System.out.println(Arrays.toString(array));
 
+            if (start_resetButton.getText().equals("Start")) {
+                System.out.println("Start Button Clicked!");
+                // enable play buttons
+                play_pauseButton.setDisable(false);
+                previousStepButton.setDisable(false);
+                nextStepButton.setDisable(false);
+                //disable array textBox
+                arrayTextField.setEditable(false);
+                //disable radio button
+                isAscRadioButton.setDisable(true);
+                isDescRadioButton.setDisable(true);
+                // set up the timelines
+                isAsc = isAscRadioButton.isSelected();
+                bubbleSort(array);
 
+                KeyFrame[] keyFrames = new KeyFrame[states.size()];
+                for (int i = 0; i < states.size(); i++) {
+                    int tempStep = i;
+                    Duration duration = Duration.millis(i * 100);
+                    KeyFrame keyFrame = new KeyFrame(duration, event -> drawArray(tempStep));
+                    stepDurationMap.put(i * 100.0, tempStep);
+                    keyFrames[i] = keyFrame;
+                }
+                System.out.println("MAP : " + stepDurationMap);
+                timeline.getKeyFrames().addAll(keyFrames);
+                timeline.setCycleCount(1);
+                timeline.setOnFinished(event -> play_pauseButton.setText("Play"));
+                //change name of the button
+                start_resetButton.setText("Reset");
+
+            } else {
+                //disable play buttons
+                play_pauseButton.setDisable(true);
+                previousStepButton.setDisable(true);
+                nextStepButton.setDisable(true);
+                //enable arrayField
+                arrayTextField.setEditable(true);
+                //enable radio buttons
+                isAscRadioButton.setDisable(false);
+                isDescRadioButton.setDisable(false);
+                //reset everything
+                states.clear();
+                timeline.stop();
+                drawArray(fArray);
+                //change the name of the button
+                start_resetButton.setText("Start");
+            }
+        }
+    }
     public void onNextStepButtonPressed(ActionEvent event) {
-        System.out.println("CURRENT STEP : " + currentStep);
+        System.out.print("CURRENT STEP : " + currentStep + ", ");
         if(currentStep < states.size()-1)
             currentStep++;
         drawArray(currentStep);
     }
-
     public void onPreviousStepButtonPressed(ActionEvent event) {
+        System.out.print("CURRENT STEP : " + currentStep + ", ");
+        if(currentStep > 0)
+            currentStep--;
+        drawArray(currentStep);
     }
-
     public void textChangedArrayTextField() {
         arrayTextField.textProperty().addListener((observable, oldValue, newValue) -> validateArrayInput());
-    }
-    Timeline timeline = new Timeline();
-
-    private boolean isSortingAnimationRunning = false;
-    int currentStep = 0;
-
-    private void animateSorting() {
-        int delay = 500; // milliseconds
-        int totalSteps = states.size();
-
-        KeyFrame[] keyFrames = new KeyFrame[totalSteps];
-        for (int i = 0; i < totalSteps; i++) {
-            int currentStep = i;
-            KeyFrame keyFrame = new KeyFrame(Duration.millis(i * delay), event -> {
-                drawArray(currentStep);
-            });
-            keyFrames[i] = keyFrame;
-        }
-
-        timeline.getKeyFrames().addAll(keyFrames);
-        timeline.setCycleCount(1);
-        timeline.setOnFinished(event -> {
-            isSortingAnimationRunning = false;
-            play_pauseButton.setText("Play");
-        });
-        timeline.play();
-        isSortingAnimationRunning = true;
-    }
-
-    public static void swap(int[] array, int from, int to){
-        int temp = array[from];
-        array[from] = array[to];
-        array[to] = temp;
     }
     private void drawArray(int currentStep) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
         int[] state = states.get(currentStep);
-
         for (int i = 0; i < state.length; i++) {
             double barHeight = state[i] * 12;
             gc.fillRect(i * 20, canvas.getHeight() - barHeight, 15, barHeight);
@@ -208,20 +198,21 @@ public class MainController {
     private void drawArray() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-
         for (int i = 0; i < array.length; i++) {
             double barHeight = array[i] * 12;
             gc.fillRect(i * 20, canvas.getHeight() - barHeight, 15, barHeight);
         }
     }
-
-    List<int[]> states = new ArrayList<>();
-
+    private void drawArray(int[] array) {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        for (int i = 0; i < array.length; i++) {
+            double barHeight = array[i] * 12;
+            gc.fillRect(i * 20, canvas.getHeight() - barHeight, 15, barHeight);
+        }
+    }
     public void bubbleSort(int[] array){
         //add the ORDER
-
-
         for (int i = 0; i < array.length; i++) {
             for (int j = i + 1; j < array.length; j++) {
                 if(isAsc){
@@ -234,15 +225,18 @@ public class MainController {
                     }
                 }
                 states.add(getState(array));
-                System.out.println(Arrays.toString(array));
             }
         }
+
     }
     public int[] getState(int[] array){
         int[] state = new int[array.length];
         System.arraycopy(array, 0, state, 0, array.length);
         return state;
     }
-
-
+    public static void swap(int[] array, int from, int to){
+        int temp = array[from];
+        array[from] = array[to];
+        array[to] = temp;
+    }
 }

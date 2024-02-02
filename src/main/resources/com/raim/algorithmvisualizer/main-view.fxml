@@ -21,7 +21,7 @@
                <padding>
                   <Insets top="-1.0" />
                </padding></TextField>
-            <RadioButton mnemonicParsing="false" selected="true" text="Ascending Order" fx:id="isAscRadioButton">
+            <RadioButton fx:id="isAscRadioButton" mnemonicParsing="false" selected="true" text="Ascending Order">
                <HBox.margin>
                   <Insets top="20.0" />
                </HBox.margin>
@@ -29,7 +29,7 @@
                   <ToggleGroup fx:id="radioToggleGroup" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="Descending Order" toggleGroup="$radioToggleGroup">
+            <RadioButton fx:id="isDescRadioButton" mnemonicParsing="false" text="Descending Order" toggleGroup="$radioToggleGroup">
                <HBox.margin>
                   <Insets top="20.0" />
                </HBox.margin>
@@ -60,10 +60,11 @@
    <center>
       <Pane prefHeight="483.0" prefWidth="549.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="nextStepButton" layoutX="310.0" layoutY="438.0" mnemonicParsing="false" onAction="#onNextStepButtonPressed" prefHeight="30.0" prefWidth="78.0" text="Next Step" />
-            <Button fx:id="previousStepButton" layoutX="14.0" layoutY="438.0" mnemonicParsing="false" onAction="#onPreviousStepButtonPressed" text="Previous Step" />
-            <Button fx:id="play_pauseButton" layoutX="169.0" layoutY="433.0" mnemonicParsing="false" onAction="#onPlay_pauseButtonPressed" prefHeight="40.0" prefWidth="88.0" text="Start" />
+            <Button fx:id="nextStepButton" layoutX="203.0" layoutY="438.0" mnemonicParsing="false" onAction="#onNextStepButtonPressed" prefHeight="27.0" prefWidth="78.0" text="Next Step" />
+            <Button fx:id="previousStepButton" layoutY="439.0" mnemonicParsing="false" onAction="#onPreviousStepButtonPressed" prefHeight="25.0" prefWidth="91.0" text="Previous Step" />
+            <Button fx:id="play_pauseButton" layoutX="102.0" layoutY="433.0" mnemonicParsing="false" onAction="#onPlay_pauseButtonPressed" prefHeight="40.0" prefWidth="88.0" text="Play" />
             <Canvas fx:id="canvas" height="428.0" width="513.0" />
+            <Button fx:id="start_resetButton" layoutX="368.0" layoutY="432.0" mnemonicParsing="false" onAction="#onStartResetButtonClicked" prefHeight="40.0" prefWidth="112.0" text="Start" />
          </children>
       </Pane>
    </center>
