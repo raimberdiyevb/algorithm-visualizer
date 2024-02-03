@@ -28,7 +28,7 @@ public class MainController {
     public Button play_pauseButton;
     public Button nextStepButton;
     public Button previousStepButton;
-    public ToggleGroup toggleGroup;
+    public ToggleGroup algorithmToggleGroup;
     public TextField arrayTextField;
     public Canvas canvas;
     public ToggleGroup radioToggleGroup;
@@ -43,6 +43,7 @@ public class MainController {
     boolean isValid = true;
     HashMap<Double, Integer> stepDurationMap = new HashMap<>();
     Timeline timeline = new Timeline();
+    String selectedAlgorithm;
     //private boolean isSortingAnimationRunning = false;
 
     @FXML
@@ -90,7 +91,7 @@ public class MainController {
     public void onBackButtonPressed(ActionEvent event) throws IOException {
         Stage currentStage = (Stage) backButton.getScene().getWindow();
         currentStage.close();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(AlgorithmVisualizerApplication.class.getResource("menu-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = new Stage();
         stage.setTitle("Algorithm Visualizer");
@@ -135,7 +136,18 @@ public class MainController {
                 isDescRadioButton.setDisable(true);
                 // set up the timelines
                 isAsc = isAscRadioButton.isSelected();
-                bubbleSort(array);
+                //choose the sorting algorithm
+                selectedAlgorithm = ((ToggleButton) algorithmToggleGroup.getSelectedToggle()).getText();
+                System.out.println("Algorithm : " + selectedAlgorithm);
+                if(selectedAlgorithm.equals("Bubble Sort")){
+                    bubbleSort(array);
+                }else if (selectedAlgorithm.equals("Selection Sort")) {
+                    selectionSort(array);
+                }else if (selectedAlgorithm.equals("Quick Sort")) {
+                    quickSort(array);
+                }else{
+                    mergeSort(array);
+                }
 
                 KeyFrame[] keyFrames = new KeyFrame[states.size()];
                 for (int i = 0; i < states.size(); i++) {
@@ -227,6 +239,46 @@ public class MainController {
                 states.add(getState(array));
             }
         }
+
+    }
+    private void selectionSort(int[] array) {
+        for (int i = 0; i < array.length - 1 ; i++) {
+            int min = i;
+            for (int j = i + 1; j < array.length; j++) {
+                if(isAsc) {
+                    if (array[j] < array[min]) {
+                        min = j;
+                    }
+                }else{
+                    if (array[j] > array[min]) {
+                        min = j;
+                    }
+                }
+                states.add(getState(array));
+            }
+            swap(array,i,min);
+        }
+    }
+    private void quickSort(int[] array) {
+        quickSort(array,0,array.length-1);
+    }
+    private void quickSort(int[] arr, int left, int right){
+        states.add(getState(array));
+        if(left < right){
+            int pivot = arr[right];
+            int i = left - 1;
+            for(int j = left; j < right; j++){
+                if(arr[j] < pivot){
+                    swap(arr,i+1,j);
+                    i++;
+                }
+            }
+            swap(arr,i+1,right);
+            quickSort(arr,left,i);
+            quickSort(arr,i+2,right);
+        }
+    }
+    private void mergeSort(int[] array){
 
     }
     public int[] getState(int[] array){

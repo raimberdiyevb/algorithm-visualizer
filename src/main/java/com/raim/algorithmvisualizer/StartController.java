@@ -22,7 +22,7 @@ public class StartController {
         startMenuScene(new Stage());
     }
     public void startMenuScene(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("menu-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(AlgorithmVisualizerApplication.class.getResource("menu-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 500, 500);
         stage.setTitle("Algorithm Visualizer");
         stage.setScene(scene);

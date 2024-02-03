@@ -14,7 +14,7 @@
                <HBox.margin>
                   <Insets left="80.0" top="20.0" />
                </HBox.margin></Label>
-            <TextField fx:id="arrayTextField" onInputMethodTextChanged="#textChangedArrayTextField" prefHeight="18.0" prefWidth="246.0" promptText="Enter comma separated integers" text="3,5,2,6,1,7,23,34,12,0,8,3,6,2">
+            <TextField fx:id="arrayTextField" onInputMethodTextChanged="#textChangedArrayTextField" prefHeight="18.0" prefWidth="246.0" promptText="Enter comma separated integers" text="3,5,2,6,1,7,23,8,3,6,2">
                <HBox.margin>
                   <Insets top="19.0" />
                </HBox.margin>
@@ -43,15 +43,16 @@
    <left>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <Group>
+            <Group fx:id="algorithmsToggleGroup">
                <children>
                   <ToggleButton fx:id="bubbleSortButton" mnemonicParsing="false" selected="true" text="Bubble Sort">
                      <toggleGroup>
-                        <ToggleGroup fx:id="toggleGroup" />
-                     </toggleGroup></ToggleButton>
-                  <ToggleButton fx:id="selectionSortButton" layoutY="45.600006103515625" mnemonicParsing="false" text="Selection Sort" toggleGroup="$toggleGroup" />
-                  <ToggleButton fx:id="quickSortButton" layoutY="91.19999694824219" mnemonicParsing="false" text="Quick Sort" toggleGroup="$toggleGroup" />
-                  <ToggleButton fx:id="mergeSortButton" layoutY="137.60000610351562" mnemonicParsing="false" text="Merge Sort" toggleGroup="$toggleGroup" />
+                        <ToggleGroup fx:id="algorithmToggleGroup" />
+                     </toggleGroup>
+                  </ToggleButton>
+                  <ToggleButton fx:id="selectionSortButton" layoutY="45.600006103515625" mnemonicParsing="false" text="Selection Sort" toggleGroup="$algorithmToggleGroup" />
+                  <ToggleButton fx:id="quickSortButton" layoutY="91.19999694824219" mnemonicParsing="false" text="Quick Sort" toggleGroup="$algorithmToggleGroup" />
+                  <ToggleButton fx:id="mergeSortButton" layoutY="137.60000610351562" mnemonicParsing="false" text="Merge Sort" toggleGroup="$algorithmToggleGroup" />
                </children>
             </Group>
          </children>
