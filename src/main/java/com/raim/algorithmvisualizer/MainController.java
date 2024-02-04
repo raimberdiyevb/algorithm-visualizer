@@ -44,6 +44,7 @@ public class MainController {
     HashMap<Double, Integer> stepDurationMap = new HashMap<>();
     Timeline timeline = new Timeline();
     String selectedAlgorithm;
+    boolean isFirst = true;
     //private boolean isSortingAnimationRunning = false;
 
     @FXML
@@ -139,14 +140,21 @@ public class MainController {
                 //choose the sorting algorithm
                 selectedAlgorithm = ((ToggleButton) algorithmToggleGroup.getSelectedToggle()).getText();
                 System.out.println("Algorithm : " + selectedAlgorithm);
-                if(selectedAlgorithm.equals("Bubble Sort")){
-                    bubbleSort(array);
-                }else if (selectedAlgorithm.equals("Selection Sort")) {
-                    selectionSort(array);
-                }else if (selectedAlgorithm.equals("Quick Sort")) {
-                    quickSort(array);
+
+                if(isFirst) {
+                    switch (selectedAlgorithm) {
+                        case "Bubble Sort" -> bubbleSort(array);
+                        case "Selection Sort" -> selectionSort(array);
+                        case "Quick Sort" -> quickSort(array);
+                        default -> mergeSort(array);
+                    }
                 }else{
-                    mergeSort(array);
+                    switch (selectedAlgorithm) {
+                        case "Bubble Sort" -> bubbleSort(fArray);
+                        case "Selection Sort" -> selectionSort(fArray);
+                        case "Quick Sort" -> quickSort(fArray);
+                        default -> mergeSort(fArray);
+                    }
                 }
 
                 KeyFrame[] keyFrames = new KeyFrame[states.size()];
@@ -163,7 +171,11 @@ public class MainController {
                 timeline.setOnFinished(event -> play_pauseButton.setText("Play"));
                 //change name of the button
                 start_resetButton.setText("Reset");
-
+                System.out.println("ARR : " + Arrays.toString(array));
+                for( int[] state : states){
+                    System.out.println(Arrays.toString(state));
+                }
+                isFirst = false;
             } else {
                 //disable play buttons
                 play_pauseButton.setDisable(true);
